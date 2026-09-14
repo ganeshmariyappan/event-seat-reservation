@@ -73,7 +73,8 @@ class Booking(db.Model):
     seat_id = db.Column(
         db.Integer,
         db.ForeignKey("seats.id"),
-        nullable=False
+        nullable=False,
+        unique=True
     )
 
     user_id = db.Column(db.Integer, nullable=False)

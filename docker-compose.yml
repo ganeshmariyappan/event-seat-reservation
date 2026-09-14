@@ -1,0 +1,40 @@
+services:
+
+  app:
+    build: .
+    container_name: seat_reservation_app
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://seatapp:seatapp123@postgres:5432/seat_reservation
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - seat_network
+
+  postgres:
+    image: postgres:16
+    container_name: seat_reservation_postgres
+    environment:
+      POSTGRES_DB: seat_reservation
+      POSTGRES_USER: seatapp
+      POSTGRES_PASSWORD: seatapp123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - seat_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: seat_reservation_redis
+    networks:
+      - seat_network
+
+volumes:
+  postgres_data:
+
+networks:
+  seat_network:
+    driver: bridge
