@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 BASE_URL = "http://192.168.49.2:32488"
 EVENT_ID = 1
-SEAT_ID = 2
+SEAT_ID = 42
 
 
 def hold_seat(user_id):

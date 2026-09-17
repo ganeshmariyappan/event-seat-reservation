@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from extension import db
+from extensions import db
 
 
 class Event(db.Model):

@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from extension import db, migrate
+from extensions import db, migrate
 import redis
 
 def create_app():

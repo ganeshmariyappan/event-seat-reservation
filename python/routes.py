@@ -2,7 +2,7 @@ import json
 from datetime import date
 from flask import Blueprint, request, jsonify, current_app
 
-from extension import db
+from extensions import db
 from models import Event, Seat, SeatHold, Booking
 
 api = Blueprint("api", __name__, url_prefix="/api")
@@ -259,7 +259,13 @@ def hold_seat(event_id, seat_id):
         str(user_id),
         nx=True,
         ex=120
-    )
+)
+
+    print("DEBUG REDIS URL:", current_app.config["REDIS_URL"])
+    print("DEBUG LOCK KEY:", lock_key)
+    print("DEBUG ACQUIRED:", acquired)
+    print("DEBUG REDIS VALUE:", current_app.redis.get(lock_key))
+    print("DEBUG REDIS TTL:", current_app.redis.ttl(lock_key))
 
     if not acquired:
         current_holder = current_app.redis.get(lock_key)
