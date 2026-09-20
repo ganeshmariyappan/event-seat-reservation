@@ -17,17 +17,46 @@ spec:
         app: seat-reservation-app
 
     spec:
+      imagePullSecrets:
+        - name: dockerhub-secret
+
       containers:
         - name: app
-          image: seat-reservation-app:v4
-          imagePullPolicy:  Always
+          image: ganesh09m/seat-reservation-app:v7
+          imagePullPolicy: IfNotPresent
 
           ports:
             - containerPort: 8000
 
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
           env:
             - name: DATABASE_URL
-              value: postgresql://seatapp:seatapp123@postgres:5432/seat_reservation
+              value: postgresql://$(DB_USER):$(DB_PASSWORD)@postgres:5432/$(DB_NAME)
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: seat-db-secret
+                  key: DB_USER
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: seat-db-secret
+                  key: DB_PASSWORD
+
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: seat-db-secret
+                  key: DB_NAME
 
             - name: REDIS_URL
               value: redis://redis:6379/0
